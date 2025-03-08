@@ -18,11 +18,11 @@ import (
 // SetupRouter 设置路由
 func SetupRouter(mode string) *gin.Engine {
 	if mode == gin.ReleaseMode {
-		gin.SetMode(gin.ReleaseMode) // 设置成发布模式
+		gin.SetMode(gin.ReleaseMode)
 	}
-
 	// 创建无任何middle路由
 	r := gin.New()
+
 	// 设置中间件
 	r.Use(logger.GinLogger(),
 		logger.GinRecovery(true),                           // Recovery 中间件会 recover掉项目可能出现的panic，并使用zap记录相关日志
@@ -40,8 +40,10 @@ func SetupRouter(mode string) *gin.Engine {
 
 	// 登录注册业务
 	v1 := r.Group("/api/v1")
-	v1.POST("/login", controller.LoginHandler)
-	v1.POST("/signup", controller.SignUpHandler)
+	{
+		v1.POST("/login", controller.LoginHandler)
+		v1.POST("/signup", controller.SignUpHandler)
+	}
 	v1.GET("/refresh_token", controller.RefreshTokenHandler) // 刷新accessToken
 
 	// 帖子业务

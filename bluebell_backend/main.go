@@ -11,12 +11,7 @@ import (
 	"fmt"
 )
 
-// @host 127.0.0.1:8081
-// @BasePath /api/v1/
 func main() {
-	// var confFile string
-	// flag.StringVar(&confFile, "conf", "./conf/config.yaml", "配置文件")
-	// flag.Parse()
 	// 加载配置
 	if err := settings.Init(); err != nil {
 		fmt.Printf("load config failed, err:%v\n", err)
@@ -36,14 +31,14 @@ func main() {
 		fmt.Printf("init redis failed, err:%v\n", err)
 		return
 	}
-
 	defer redis.Close()
+
 	// 雪花算法生成分布式ID
 	if err := snowflake.Init(1); err != nil {
 		fmt.Printf("init snowflake failed, err:%v\n", err)
 		return
 	}
-
+	// 翻译器初始化
 	if err := controller.InitTrans("zh"); err != nil {
 		fmt.Printf("init validator Trans failed,err:%v\n", err)
 		return
