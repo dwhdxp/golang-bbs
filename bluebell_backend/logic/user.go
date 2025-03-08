@@ -34,6 +34,7 @@ func SignUp(p *models.RegisterForm) (error error) {
 
 // 登录业务逻辑代码
 func Login(p *models.LoginForm) (user *models.User, error error) {
+	// 1.判断用户是否存在以及密码是否输入正确
 	user = &models.User{
 		UserName: p.UserName,
 		Password: p.Password,
@@ -41,8 +42,8 @@ func Login(p *models.LoginForm) (user *models.User, error error) {
 	if err := mysql.Login(user); err != nil {
 		return nil, err
 	}
-	// 生成JWT
-	//return jwt.GenToken(user.UserID,user.UserName)
+
+	// 2.生成JWT：AccessToken和RefreshToken
 	accessToken, refreshToken, err := jwt.GenToken(user.UserID, user.UserName)
 	if err != nil {
 		return
