@@ -9,7 +9,7 @@ import (
 
 /**
  * 需要额外定义UserID和UserName，因此自定义 MyClaims，并内嵌官方字段
- * 如果想要保存更多信息，都可以添加到这个结构体中
+ * 如果想要保存更多信息，都可以添加到这个结构体中，切记不要保存敏感信息
  **/
 type MyClaims struct {
 	UserID             uint64 `json:"user_id"`
@@ -55,7 +55,7 @@ func GenToken(userID uint64, username string) (aToken, rToken string, err error)
 	return
 }
 
-// ParseToken 解析JWT
+// ParseToken 解析并验证JWT
 func ParseToken(tokenString string) (claims *MyClaims, err error) {
 	// 解析TokenString
 	var token *jwt.Token
