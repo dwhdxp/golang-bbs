@@ -38,9 +38,8 @@ func SetupRouter(mode string) *gin.Engine {
 	// 注册swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	// 登录注册业务
 	v1 := r.Group("/api/v1")
-
+	// 登录注册业务
 	v1.POST("/login", controller.LoginHandler)
 	v1.POST("/signup", controller.SignUpHandler)
 	v1.GET("/refresh_token", controller.RefreshTokenHandler) // 刷新accessToken
@@ -53,7 +52,7 @@ func SetupRouter(mode string) *gin.Engine {
 
 	// 社区业务
 	v1.GET("/community", controller.CommunityHandler)           // 获取分类社区列表
-	v1.GET("/community/:id", controller.CommunityDetailHandler) // 根据ID查找社区详情
+	v1.GET("/community/:id", controller.CommunityDetailHandler) // 根据社区id查找社区详情
 
 	// Github热榜
 	v1.GET("/github_trending", controller.GithubTrendingHandler) // Github热榜
