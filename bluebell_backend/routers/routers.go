@@ -40,10 +40,9 @@ func SetupRouter(mode string) *gin.Engine {
 
 	// 登录注册业务
 	v1 := r.Group("/api/v1")
-	{
-		v1.POST("/login", controller.LoginHandler)
-		v1.POST("/signup", controller.SignUpHandler)
-	}
+
+	v1.POST("/login", controller.LoginHandler)
+	v1.POST("/signup", controller.SignUpHandler)
 	v1.GET("/refresh_token", controller.RefreshTokenHandler) // 刷新accessToken
 
 	// 帖子业务
@@ -59,8 +58,8 @@ func SetupRouter(mode string) *gin.Engine {
 	// Github热榜
 	v1.GET("/github_trending", controller.GithubTrendingHandler) // Github热榜
 
-	// 中间件
-	v1.Use(middlewares.JWTAuthMiddleware()) // 应用JWT认证中间件
+	// JWT认证中间件
+	v1.Use(middlewares.JWTAuthMiddleware())
 	{
 		v1.POST("/post", controller.CreatePostHandler) // 创建帖子
 
