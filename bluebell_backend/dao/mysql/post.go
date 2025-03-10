@@ -21,7 +21,7 @@ func GetPostTotalCount() (count int64, err error) {
 	return
 }
 
-// GetCommunityPostTotalCount 根据社区id查询数据库帖子总数
+// GetCommunityPostTotalCount 根据社区Id查询数据库帖子总数
 func GetCommunityPostTotalCount(communityID uint64) (count int64, err error) {
 	sqlStr := `select count(post_id) from post where community_id = ?`
 	err = db.Get(&count, sqlStr, communityID)
@@ -63,18 +63,18 @@ func GetPostByID(pid int64) (post *models.Post, err error) {
 	return
 }
 
-// GetPostListByIDs 根据给定的id列表查询帖子数据
+// GetPostListByIDs 根据给定的ids查询帖子数据
 func GetPostListByIDs(ids []string) (postList []*models.Post, err error) {
 	sqlStr := `select post_id, title, content, author_id, community_id, create_time
 	from post
 	where post_id in (?)
-	order by FIND_IN_SET(post_id, ?)`
-	// 动态填充id
+	order by FIND_IN_SET(post_id, ?)` // 确保结果按传入的ids顺序返回
+	// 将ids拼接成逗号分隔的字符串
 	query, args, err := sqlx.In(sqlStr, ids, strings.Join(ids, ","))
 	if err != nil {
 		return
 	}
-	// sqlx.In 返回带 `?` bindvar的查询语句, 我们使用Rebind()重新绑定它
+	// 不同数据库占位符格式不同，Rebind可以按mysql要求的'?'重新绑定查询语句，确保占位符格式正确
 	query = db.Rebind(query)
 	err = db.Select(&postList, query, args...)
 	return
@@ -89,7 +89,6 @@ func GetPostList(page, size int64) (posts []*models.Post, err error) {
 	limit ?,?
 	`
 	posts = make([]*models.Post, 0, 2)
-	// page表示展示第几页，size表示一页几个帖子
 	err = db.Select(&posts, sqlStr, (page-1)*size, size)
 	return
 }
