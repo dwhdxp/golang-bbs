@@ -68,7 +68,7 @@ func SetupRouter(mode string) *gin.Engine {
 		v1.GET("/comment", controller.CommentListHandler) // 评论列表
 
 		v1.GET("/ping", func(c *gin.Context) {
-			c.String(http.StatusOK, "pong")
+			c.String(http.StatusOK, "ping success")
 		})
 	}
 
