@@ -2,11 +2,11 @@ package redis
 
 // redis key 注意使用命名空间的方式，方便查询和拆分
 const (
-	KeyPostInfoHashPrefix = "bluebell:post:"
-	KeyPostTimeZSet       = "bluebell:post:time"  // zset;帖子及发帖时间定义
-	KeyPostScoreZSet      = "bluebell:post:score" // zset;帖子及投票分数定义
+	KeyPostInfoHashPrefix = "bluebell:post:"      // 存储帖子详细信息 Hash
+	KeyPostTimeZSet       = "bluebell:post:time"  // 存储帖子发布时间信息 ZSet
+	KeyPostScoreZSet      = "bluebell:post:score" // 存储帖子得分信息 ZSet
 	//KeyPostVotedUpSetPrefix   = "bluebell:post:voted:down:"
 	//KeyPostVotedDownSetPrefix = "bluebell:post:voted:up:"
-	KeyPostVotedZSetPrefix    = "bluebell:post:voted:" // zset;记录用户及投票类型;参数是post_id
-	KeyCommunityPostSetPrefix = "bluebell:community:"  // set保存每个分区下帖子的id
+	KeyPostVotedZSetPrefix    = "bluebell:post:voted:" // 存储帖子投票信息 ZSet;参数是post_id
+	KeyCommunityPostSetPrefix = "bluebell:community:"  // 存储某社区下所有帖子ID Set
 )
