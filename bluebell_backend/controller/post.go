@@ -38,7 +38,6 @@ func CreatePostHandler(c *gin.Context) {
 		ResponseError(c, CodeServerBusy)
 		return
 	}
-	// 3、返回响应
 	ResponseSuccess(c, nil)
 }
 
@@ -55,7 +54,7 @@ func PostListHandler(c *gin.Context) {
 	ResponseSuccess(c, data)
 }
 
-// PostList2Handler 升级版帖子列表接口：按 创建时间 或者 分数排序
+// PostList2Handler 获取帖子列表接口：按发布时间或分数排序(最新发布或分数最高的排第一)
 func PostList2Handler(c *gin.Context) {
 	// GET请求参数(query string)： /api/v1/posts2?page=1&size=10&order=time
 	// 获取分页参数
