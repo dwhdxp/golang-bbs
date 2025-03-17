@@ -25,8 +25,8 @@ func SetupRouter(mode string) *gin.Engine {
 
 	// 设置中间件
 	r.Use(logger.GinLogger(),
-		logger.GinRecovery(true),                           // Recovery 中间件会recover掉项目可能出现的panic，并使用zap记录相关日志
-		middlewares.RateLimitMiddleware(2*time.Second, 40), // 每两秒钟添加十个令牌  全局限流
+		logger.GinRecovery(true),                           // Recovery 中间件会recover掉项目可能出现的panic
+		middlewares.RateLimitMiddleware(2*time.Second, 40), // 限流中间件进行全局限流，每两秒填充
 	)
 
 	// 注册swagger
