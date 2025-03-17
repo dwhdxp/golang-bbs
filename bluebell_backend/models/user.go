@@ -49,6 +49,13 @@ type RegisterForm struct {
 	ConfirmPassword string `json:"confirm_password" binding:"required,eqfield=Password"`
 }
 
+// RegisterEmailData 定义注册时发送邮箱结构体
+type RegisterEmailData struct {
+	Email    string `json:"email" binding:"required"`
+	UserName string `json:"username" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
 // LoginForm 定义用户登录时的请求参数
 type LoginForm struct {
 	UserName string `json:"username" binding:"required"`

@@ -4,7 +4,10 @@ import (
 	"bluebell_backend/dao/mysql"
 	"bluebell_backend/models"
 	"bluebell_backend/pkg/jwt"
+	"bluebell_backend/pkg/rabbitmq"
 	"bluebell_backend/pkg/snowflake"
+	"fmt"
+	"go.uber.org/zap"
 )
 
 // 注册业务逻辑代码
@@ -51,4 +54,41 @@ func Login(p *models.LoginForm) (user *models.User, error error) {
 	user.AccessToken = accessToken
 	user.RefreshToken = refreshToken
 	return
+}
+
+// SignUpNew 注册逻辑代码优化，将邮件发送任务异步发布到RabbitMQ队列中
+func SignUpNew(p *models.RegisterForm) error {
+	var errs []error
+
+	// 用户提供电子邮件
+	if p.Email != "" {
+		Ed := &models.RegisterEmailData{
+			Email:    p.Email,
+			UserName: p.UserName,
+			Password: p.Password,
+		}
+		zap.L().Debug("emaildetail", zap.String("Username", Ed.UserName),
+			zap.String("Email", Ed.Email))
+		// 使用生产者发布邮件任务到队列
+		err := rabbitmq.PublishEmailTask(Ed)
+		if err != nil {
+			errs = append(errs, fmt.Errorf("failed to publish email task: %w;", err))
+		}
+		//// 不使用消息队列
+		//err := email.SendEmail(Ed)
+		//if err != nil {
+		//	errs = append(errs, err)
+		//}
+	}
+
+	// 用户注册操作
+	if err := SignUp(p); err != nil {
+		errs = append(errs, fmt.Errorf("signup error: %w", err))
+	}
+	zap.L().Debug("signup success", zap.String("email", p.Email),
+		zap.String("username", p.UserName))
+	if len(errs) > 0 {
+		return fmt.Errorf("multiple errors occurred: %v", errs)
+	}
+	return nil
 }

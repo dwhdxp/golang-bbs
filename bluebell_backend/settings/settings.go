@@ -19,6 +19,7 @@ type AppConfig struct {
 	*LogConfig   `mapstructure:"log"`
 	*MySQLConfig `mapstructure:"mysql"`
 	*RedisConfig `mapstructure:"redis"`
+	*EmailConfig `mapstructure:"email"`
 }
 
 type MySQLConfig struct {
@@ -46,6 +47,13 @@ type LogConfig struct {
 	MaxSize    int    `mapstructure:"max_size"`
 	MaxAge     int    `mapstructure:"max_age"`
 	MaxBackups int    `mapstructure:"max_backups"`
+}
+
+type EmailConfig struct {
+	SmtpHost string `mapstructure:"smtp_host"`
+	SmtpPort int    `mapstructure:"smtp_port"`
+	UserName string `mapstructure:"username"`
+	Password string `mapstructure:"password"`
 }
 
 func Init() error {

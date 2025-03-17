@@ -5,6 +5,7 @@ import (
 	"bluebell_backend/dao/mysql"
 	"bluebell_backend/dao/redis"
 	"bluebell_backend/logger"
+	"bluebell_backend/pkg/rabbitmq"
 	"bluebell_backend/pkg/snowflake"
 	"bluebell_backend/routers"
 	"bluebell_backend/settings"
@@ -43,6 +44,9 @@ func main() {
 		fmt.Printf("init validator Trans failed,err:%v\n", err)
 		return
 	}
+
+	// 启动消费者
+	go rabbitmq.Consumer()
 
 	// 注册路由
 	r := routers.SetupRouter(settings.Conf.Mode)

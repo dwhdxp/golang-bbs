@@ -35,7 +35,7 @@ func SignUpHandler(c *gin.Context) {
 	}
 	fmt.Printf("fo: %v\n", fo)
 	// 3.业务逻辑处理——注册
-	if err := logic.SignUp(fo); err != nil {
+	if err := logic.SignUpNew(fo); err != nil {
 		zap.L().Error("logic.signup failed", zap.Error(err))
 		if err.Error() == mysql.ErrorUserExit {
 			ResponseError(c, CodeUserExist)

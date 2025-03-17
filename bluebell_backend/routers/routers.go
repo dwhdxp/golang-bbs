@@ -25,7 +25,7 @@ func SetupRouter(mode string) *gin.Engine {
 
 	// 设置中间件
 	r.Use(logger.GinLogger(),
-		logger.GinRecovery(true),                           // Recovery 中间件会 recover掉项目可能出现的panic，并使用zap记录相关日志
+		logger.GinRecovery(true),                           // Recovery 中间件会recover掉项目可能出现的panic，并使用zap记录相关日志
 		middlewares.RateLimitMiddleware(2*time.Second, 40), // 每两秒钟添加十个令牌  全局限流
 	)
 
@@ -38,7 +38,7 @@ func SetupRouter(mode string) *gin.Engine {
 	// 注册swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	v1 := r.Group("/api/v1")
+	v1 := r.Group("/api/v1") // 创建API v1版本路由组
 	// 登录注册业务
 	v1.POST("/login", controller.LoginHandler)
 	v1.POST("/signup", controller.SignUpHandler)
@@ -53,9 +53,6 @@ func SetupRouter(mode string) *gin.Engine {
 	// 社区业务
 	v1.GET("/community", controller.CommunityHandler)           // 获取分类社区列表
 	v1.GET("/community/:id", controller.CommunityDetailHandler) // 根据社区id查找社区详情
-
-	// Github热榜
-	v1.GET("/github_trending", controller.GithubTrendingHandler) // Github热榜
 
 	// JWT认证中间件
 	v1.Use(middlewares.JWTAuthMiddleware())
@@ -73,6 +70,8 @@ func SetupRouter(mode string) *gin.Engine {
 	}
 
 	pprof.Register(r) // 注册pprof相关路由
+
+	// 处理其他路由
 	r.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"msg": "404",
