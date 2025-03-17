@@ -29,12 +29,6 @@ func SetupRouter(mode string) *gin.Engine {
 		middlewares.RateLimitMiddleware(2*time.Second, 40), // 每两秒钟添加十个令牌  全局限流
 	)
 
-	r.LoadHTMLFiles("templates/index.html") // 加载html
-	r.Static("/static", "./static")         // 加载静态文件
-	r.GET("/", func(context *gin.Context) {
-		context.HTML(http.StatusOK, "index.html", nil)
-	})
-
 	// 注册swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
