@@ -15,7 +15,7 @@ type AppConfig struct {
 	Name         string `mapstructure:"name"`
 	Version      string `mapstructure:"version"`
 	StartTime    string `mapstructure:"start_time"`
-	MachineID    int    `mapstructure:"machine_id"`
+	MachineID    uint16 `mapstructure:"machine_id"`
 	*LogConfig   `mapstructure:"log"`
 	*MySQLConfig `mapstructure:"mysql"`
 	*RedisConfig `mapstructure:"redis"`
